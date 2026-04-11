@@ -2,13 +2,13 @@
 
 This project uses the requested stack:
 
-- **Frontend:** React + Vite
+- **Frontend:** React + Vite + Tailwind CSS
 - **Backend:** Node.js + Express
 - **Database:** MongoDB (Mongoose)
 
 ## Project Structure
 
-- `client/` → React (Vite) app
+- `client/` → React (Vite) app with Tailwind styling
 - `server/` → Express API + MongoDB models/routes
 
 ## Features Implemented
@@ -54,4 +54,5 @@ Backend: <http://localhost:5000>
 ## Notes
 
 - `client` proxies `/api` calls to `http://localhost:5000`.
+- Tailwind is configured in `client/tailwind.config.js` and `client/postcss.config.js`.
 - To update content programmatically, send a `PUT` request to `/api/content` with the same shape as seed data.
