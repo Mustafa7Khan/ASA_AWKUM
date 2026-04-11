@@ -1,32 +1,57 @@
-# University Teachers' Union Website (Starter)
+# University Teachers' Union Portal (MERN)
 
-A responsive starter website for a university teachers' union with:
+This project uses the requested stack:
 
-- News and announcements section
-- Current cabinet profiles (name, designation, photo, department)
+- **Frontend:** React + Vite
+- **Backend:** Node.js + Express
+- **Database:** MongoDB (Mongoose)
+
+## Project Structure
+
+- `client/` → React (Vite) app
+- `server/` → Express API + MongoDB models/routes
+
+## Features Implemented
+
+- News section
+- Current cabinet with designation, department, and photos
 - Previous cabinets archive
-- Timeline for union struggle/history
-- Contact section
+- History of struggle timeline
+- API-backed content (`GET /api/content`, `PUT /api/content`)
+- Fallback seed data when DB has no records yet
 
-## Run locally
+## Setup
 
-Because this is a static site, you can simply open `index.html` in a browser.
-
-Or serve it with a local server:
+1. Install dependencies:
 
 ```bash
-python -m http.server 8080
+npm install
 ```
 
-Then open <http://localhost:8080>.
+2. Configure environment:
 
-## Customize content
+```bash
+cp server/.env.example server/.env
+```
 
-Update data arrays in `script.js`:
+3. Ensure MongoDB is running locally (or update `MONGO_URI` in `.env`).
 
-- `news`
-- `currentCabinet`
-- `previousCabinets`
-- `struggles`
+4. Run backend:
 
-Replace placeholder images with real cabinet photos.
+```bash
+npm run dev:server
+```
+
+5. In a separate terminal, run frontend:
+
+```bash
+npm run dev:client
+```
+
+Frontend: <http://localhost:5173>
+Backend: <http://localhost:5000>
+
+## Notes
+
+- `client` proxies `/api` calls to `http://localhost:5000`.
+- To update content programmatically, send a `PUT` request to `/api/content` with the same shape as seed data.
