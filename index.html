@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>University Teachers' Union</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="nav container">
+        <h1>Teachers' Union</h1>
+        <ul>
+          <li><a href="#news">News</a></li>
+          <li><a href="#current-cabinet">Current Cabinet</a></li>
+          <li><a href="#previous-cabinets">Previous Cabinets</a></li>
+          <li><a href="#struggle">Our Struggle</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <section class="hero-content container">
+        <p class="badge">Official Portal</p>
+        <h2>University Teachers' Union</h2>
+        <p>
+          Voice of teachers, defender of rights, and partner in academic
+          progress.
+        </p>
+      </section>
+    </header>
+
+    <main>
+      <section id="news" class="section container">
+        <div class="section-head">
+          <h3>Latest News</h3>
+          <p>Announcements, election updates, and activities.</p>
+        </div>
+        <div class="cards news-grid" id="news-list"></div>
+      </section>
+
+      <section id="current-cabinet" class="section container">
+        <div class="section-head">
+          <h3>Current Cabinet</h3>
+          <p>Profiles of the elected team serving this year.</p>
+        </div>
+        <div class="cards" id="current-cabinet-list"></div>
+      </section>
+
+      <section id="previous-cabinets" class="section section-alt">
+        <div class="container">
+          <div class="section-head">
+            <h3>Previous Cabinets</h3>
+            <p>Union leadership from past years.</p>
+          </div>
+          <div class="accordion" id="previous-cabinets-list"></div>
+        </div>
+      </section>
+
+      <section id="struggle" class="section container">
+        <div class="section-head">
+          <h3>History of Struggle</h3>
+          <p>Key milestones in the union's movement.</p>
+        </div>
+        <ol class="timeline" id="struggle-list"></ol>
+      </section>
+
+      <section id="contact" class="section section-alt">
+        <div class="container">
+          <div class="section-head">
+            <h3>Contact</h3>
+            <p>Reach out for support, membership, or media queries.</p>
+          </div>
+          <div class="contact-box">
+            <p><strong>Email:</strong> teachersunion@university.edu</p>
+            <p><strong>Office:</strong> Main Campus, Admin Block, Room 204</p>
+            <p><strong>Office Hours:</strong> Sunday–Thursday, 10:00 AM – 4:00 PM</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© <span id="year"></span> University Teachers' Union. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
