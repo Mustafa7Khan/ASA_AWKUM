@@ -42,9 +42,8 @@ const seedData = {
       ],
     },
   ],
-
   milestones: [
-
+  milestones: [
   struggles: [
 
     {

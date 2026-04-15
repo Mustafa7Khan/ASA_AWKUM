@@ -1,5 +1,11 @@
 import express from 'express';
 import Feedback from '../models/Feedback.js';
+import authMiddleware from '../middleware/authMiddleware.js';
+
+const router = express.Router();
+
+router.get('/', authMiddleware, async (_req, res) => {
+
 
 const router = express.Router();
 
