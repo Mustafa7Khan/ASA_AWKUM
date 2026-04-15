@@ -7,6 +7,18 @@ const navItems = [
 ];
 
 export default function Layout({ children, isAuthenticated, onLogout }) {
+
+  ['/news', 'News'],
+  ['/current-cabinet', 'Current Cabinet'],
+  ['/previous-cabinets', 'Previous Cabinets'],
+  ['/struggles', 'Struggles'],
+  ['/about', 'About'],
+  ['/contact', 'Contact'],
+  ['/feedback', 'Feedback'],
+  ['/admin', 'Admin'],
+];
+
+export default function Layout({ children }) {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="bg-gradient-to-r from-brand-900 to-brand-600 text-white">
@@ -40,6 +52,19 @@ export default function Layout({ children, isAuthenticated, onLogout }) {
               </NavLink>
             )}
           </div>
+          <nav className="flex flex-wrap gap-2">
+            {navItems.map(([to, label]) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `rounded px-3 py-1 text-sm ${isActive ? 'bg-white text-brand-900' : 'bg-white/10 hover:bg-white/20'}`
+                }
+              >
+                {label}
+              </NavLink>
+            ))}
+          </nav>
         </div>
       </header>
 

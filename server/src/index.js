@@ -15,6 +15,7 @@ import feedbackRoutes from './routes/feedbackRoutes.js';
 import publicRoutes from './routes/publicRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 
+import contentRoutes from './routes/contentRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -23,6 +24,10 @@ const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/teachers_u
 
 app.use(cors());
 app.use(express.json());
+
+
+app.use('/api', contentRoutes);
+
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
@@ -63,6 +68,11 @@ mongoose
   .connect(MONGO_URI)
   .then(async () => {
     await seedIfEmpty();
+
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });

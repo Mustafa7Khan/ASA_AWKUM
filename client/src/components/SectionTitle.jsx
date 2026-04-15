@@ -3,6 +3,15 @@ export default function SectionTitle({ title, subtitle }) {
     <div className="mb-4">
       <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
       {subtitle ? <p className="mt-1 text-slate-600">{subtitle}</p> : null}
+
+    <div className="mb-4">
+      <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
+      {subtitle ? <p className="mt-1 text-slate-600">{subtitle}</p> : null}
+
+    <div>
+      <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
+      <p className="mt-1 text-slate-600">{subtitle}</p>
+
     </div>
   );
 }
