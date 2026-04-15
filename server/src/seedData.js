@@ -42,7 +42,11 @@ const seedData = {
       ],
     },
   ],
+
+  milestones: [
+
   struggles: [
+
     {
       year: '2018',
       text: 'Movement for transparent recruitment and fair promotion policy.',

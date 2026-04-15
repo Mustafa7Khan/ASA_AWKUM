@@ -10,7 +10,12 @@
   },
   "dependencies": {
     "react": "^18.3.1",
+# codex/build-website-for-teacher-union-2jtxy5
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.1"
+=======
     "react-dom": "^18.3.1"
+# main
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
