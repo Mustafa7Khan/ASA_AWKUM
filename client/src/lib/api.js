@@ -1,14 +1,14 @@
 export async function api(path, options = {}) {
   const token = localStorage.getItem('adminToken');
+  
   const response = await fetch(path, {
+    ...options,
     headers: {
       'Content-Type': 'application/json',
+      // Only attach the Authorization header if a token exists
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {}),
     },
-  const response = await fetch(path, {
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
-    ...options,
   });
 
   if (!response.ok) {

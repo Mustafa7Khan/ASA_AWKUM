@@ -20,7 +20,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/teachers_union';
+const MONGO_URI = process.env.MONGO_URI;
 
 app.use(cors());
 app.use(express.json());
@@ -62,17 +62,18 @@ async function seedIfEmpty() {
   if (milestoneCount === 0) tasks.push(Milestone.insertMany(seedData.milestones));
 
   await Promise.all(tasks);
-}
+};
 
 mongoose
   .connect(MONGO_URI)
   .then(async () => {
+    console.log('Connected to MongoDB Atlas');
+    
+    // Run the seeding logic once connected
     await seedIfEmpty();
+    console.log('Seeding check complete.');
 
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-
+    // Start the server only after seeding is checked
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });

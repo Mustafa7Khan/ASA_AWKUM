@@ -42,9 +42,8 @@ const seedData = {
       ],
     },
   ],
+
   milestones: [
-  milestones: [
-  struggles: [
 
     {
       year: '2018',
@@ -54,7 +53,7 @@ const seedData = {
       year: '2022',
       text: 'Negotiation for better research grants and faculty welfare support.',
     },
-  ],
+  ]
 };
 
 export default seedData;

@@ -1,139 +1,53 @@
-import { useEffect, useState } from 'react';
-import SectionTitle from '../components/SectionTitle';
-import { api } from '../lib/api';
-
-export default function HomePage() {
-  const [content, setContent] = useState({ news: [], currentCabinet: [], previousCabinets: [], milestones: [] });
-  const [feedbackForm, setFeedbackForm] = useState({ email: '', feedback: '' });
-  const [feedbackStatus, setFeedbackStatus] = useState('');
-
-  useEffect(() => {
-    api('/api/public/overview').then(setContent).catch(() => {});
-  }, []);
-
-  async function submitFeedback(event) {
-    event.preventDefault();
-    try {
-      await api('/api/feedback', { method: 'POST', body: JSON.stringify(feedbackForm) });
-      setFeedbackForm({ email: '', feedback: '' });
-      setFeedbackStatus('Feedback submitted successfully.');
-    } catch {
-      setFeedbackStatus('Unable to submit feedback right now.');
-    }
-  }
-
-  return (
-    <div className="space-y-10">
-      <section>
-        <SectionTitle title="Latest News" subtitle="Announcements and updates" />
-        <div className="grid gap-4 md:grid-cols-2">
-          {content.news.map((item) => (
-            <article key={item._id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <p className="text-sm text-slate-500">{item.date}</p>
-              <h3 className="font-semibold">{item.title}</h3>
-              <p className="text-slate-700">{item.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <SectionTitle title="Current Cabinet" subtitle="Current elected team" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {content.currentCabinet.map((member) => (
-            <article key={member._id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <img src={member.image || 'https://placehold.co/600x600?text=Member'} alt={member.name} className="h-52 w-full rounded-lg object-cover" />
-              <h3 className="mt-2 font-semibold">{member.name}</h3>
-              <p className="text-sm text-slate-500">{member.designation}</p>
-              <p className="text-slate-700">{member.department}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <SectionTitle title="Previous Cabinets" subtitle="Leadership archive" />
-        <div className="space-y-3">
-          {content.previousCabinets.map((cabinet) => (
-            <details key={cabinet._id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <summary className="cursor-pointer font-semibold">{cabinet.year}</summary>
-              <div className="mt-3 grid gap-3 md:grid-cols-2">
-                {cabinet.members.map((member, idx) => (
-                  <article key={`${cabinet._id}-${idx}`} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                    <h4 className="font-semibold">{member.name}</h4>
-                    <p className="text-sm text-slate-500">{member.designation}</p>
-                    <p className="text-slate-700">{member.department}</p>
-                  </article>
-                ))}
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <SectionTitle title="Struggles & Milestones" subtitle="Historical milestones of the union" />
-        <ol className="space-y-3 border-l-4 border-brand-700 pl-4">
-          {content.milestones.map((milestone) => (
-            <li key={milestone._id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <strong className="text-brand-900">{milestone.year}</strong>
-              <p className="mt-1 text-slate-700">{milestone.text}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <SectionTitle title="Give Feedback" subtitle="Share suggestions with union leadership" />
-        <form onSubmit={submitFeedback} className="space-y-3">
-          <input
-            type="email"
-            required
-            placeholder="Email"
-            className="w-full rounded border border-slate-300 px-3 py-2"
-            value={feedbackForm.email}
-            onChange={(e) => setFeedbackForm((prev) => ({ ...prev, email: e.target.value }))}
-          />
-          <textarea
-            required
-            rows={4}
-            placeholder="Your feedback"
-            className="w-full rounded border border-slate-300 px-3 py-2"
-            value={feedbackForm.feedback}
-            onChange={(e) => setFeedbackForm((prev) => ({ ...prev, feedback: e.target.value }))}
-          />
-          <button className="rounded bg-brand-700 px-4 py-2 text-white hover:bg-brand-900" type="submit">
-            Submit Feedback
-          </button>
-        </form>
-        {feedbackStatus ? <p className="mt-3 text-sm text-slate-600">{feedbackStatus}</p> : null}
-      </section>
 import { Link } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
 
 const shortcuts = [
-  ['News', '/news'],
-  ['Current Cabinet', '/current-cabinet'],
-  ['Previous Cabinets', '/previous-cabinets'],
-  ['Struggles & Milestones', '/struggles'],
-  ['Give Feedback', '/feedback'],
+  { label: 'News', path: '/news', desc: 'Read the latest union announcements.' },
+  { label: 'Current Cabinet', path: '/current-cabinet', desc: 'Meet your elected representatives.' },
+  { label: 'Previous Cabinets', path: '/previous-cabinets', desc: 'View our leadership archive.' },
+  { label: 'Struggles & Milestones', path: '/struggles', desc: 'Explore the history of our union.' },
+  { label: 'Give Feedback', path: '/feedback', desc: 'Share your suggestions with us.' },
+  { label: 'About Us', path: '/about', desc: 'Learn about our mission and vision.' },
 ];
 
 export default function HomePage() {
   return (
-    <div>
-      <SectionTitle
-        title="Welcome to Teachers' Union Portal"
-        subtitle="Browse union updates, leadership information, struggle history, and share your feedback."
-      />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {shortcuts.map(([label, path]) => (
-          <Link key={path} to={path} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-brand-600">
-            <h3 className="text-lg font-semibold">{label}</h3>
-            <p className="mt-1 text-sm text-slate-600">Open {label.toLowerCase()} page</p>
-          </Link>
-        ))}
-      </div>
+    <div className="space-y-8">
+      {/* Hero Section */}
+      <section>
+        <SectionTitle
+          title="Welcome to the Teachers' Union Portal"
+          subtitle="Protecting teacher dignity, rights, and academic progress through collective leadership."
+        />
+        
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {shortcuts.map((item) => (
+            <Link 
+              key={item.path} 
+              to={item.path} 
+              className="group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-brand-600 hover:shadow-md"
+            >
+              <h3 className="text-lg font-semibold group-hover:text-brand-700">{item.label}</h3>
+              <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
+              <div className="mt-3 text-xs font-bold uppercase tracking-wider text-brand-600">
+                View Page &rarr;
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Quick Mission Statement */}
+      <section className="rounded-2xl bg-brand-900 p-8 text-white">
+        <div className="max-w-3xl">
+          <h2 className="text-2xl font-bold">Our Commitment</h2>
+          <p className="mt-4 text-slate-100 leading-relaxed">
+            The University Teachers' Union stands as a bulwark for academic freedom. 
+            We ensure that the voices of educators are heard in every decision-making 
+            process, fostering an environment where both teachers and students thrive.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
