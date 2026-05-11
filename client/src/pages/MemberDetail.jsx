@@ -8,7 +8,7 @@ export default function MemberDetail() {
   const [member, setMember] = useState(null);
   
   // Use the root URL (port 5000) for static assets
-  const ASSET_URL = "http://localhost:5000";
+  const ASSET_URL = "https://asa-awkum-server.vercel.app";
 
   useEffect(() => {
     // Note: If your backend has a specific route like /cabinet-members/:id, use that instead

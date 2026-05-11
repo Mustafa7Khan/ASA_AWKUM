@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://asa-awkum-server.vercel.app';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://asa-awkum-server.vercel.app/api';
 
 // ⏱️ Timeout helper
 function timeoutPromise(ms) {

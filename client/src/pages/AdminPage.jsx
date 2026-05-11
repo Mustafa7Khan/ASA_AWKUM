@@ -10,7 +10,7 @@ const blankMilestone = { year: '', text: '' };
 export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('feedback'); 
-  const ASSET_URL = "http://localhost:5000";
+  const ASSET_URL = "https://asa-awkum-server.vercel.app";
   
   // Data States
   const [news, setNews] = useState([]);
