@@ -1,34 +1,38 @@
-import cors from 'cors';
 import dotenv from 'dotenv';
+dotenv.config();
+import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
-import seedData from './seedData.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import Cabinet from './models/Cabinet.js';
 import CabinetMember from './models/CabinetMember.js';
-import PreviousCabinet from './models/PreviousCabinet.js';
 import News from './models/News.js';
 import Milestone from './models/Milestone.js';
+
 import newsRoutes from './routes/newsRoutes.js';
-import currentCabinetRoutes from './routes/currentCabinetRoutes.js';
-import previousCabinetRoutes from './routes/previousCabinetRoutes.js';
+import cabinetRoutes from './routes/cabinetRoutes.js';
+import cabinetMemberRoutes from './routes/cabinetMemberRoutes.js';
 import milestoneRoutes from './routes/milestoneRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 import publicRoutes from './routes/publicRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-
-import contentRoutes from './routes/contentRoutes.js';
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.use('/api', contentRoutes);
-
-
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// ================= ROUTES =================
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
@@ -36,44 +40,62 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/news', newsRoutes);
-app.use('/api/current-cabinet', currentCabinetRoutes);
-app.use('/api/previous-cabinets', previousCabinetRoutes);
+app.use('/api/cabinets', cabinetRoutes);
+app.use('/api/cabinet-members', cabinetMemberRoutes);
 app.use('/api/milestones', milestoneRoutes);
 app.use('/api/feedback', feedbackRoutes);
 
+
+// ================= ERROR HANDLER =================
 app.use((err, _req, res, _next) => {
   console.error(err);
   res.status(500).json({ message: 'Internal server error' });
 });
 
+
+// ================= SEED FUNCTION =================
 async function seedIfEmpty() {
-  const [newsCount, currentCount, previousCount, milestoneCount] = await Promise.all([
+  const [newsCount, cabinetCount, milestoneCount] = await Promise.all([
     News.countDocuments(),
-    CabinetMember.countDocuments(),
-    PreviousCabinet.countDocuments(),
+    Cabinet.countDocuments(),
     Milestone.countDocuments(),
   ]);
 
   const tasks = [];
 
-  if (newsCount === 0) tasks.push(News.insertMany(seedData.news));
-  if (currentCount === 0) tasks.push(CabinetMember.insertMany(seedData.currentCabinet));
-  if (previousCount === 0) tasks.push(PreviousCabinet.insertMany(seedData.previousCabinets));
-  if (milestoneCount === 0) tasks.push(Milestone.insertMany(seedData.milestones));
+  // 🔹 Seed News
+  if (newsCount === 0) {
+    tasks.push(News.insertMany(seedData.news));
+  }
+
+  // 🔹 Seed Cabinets
+  if (cabinetCount === 0) {
+    tasks.push(Cabinet.insertMany(seedData.cabinets));
+  }
+
+  // 🔹 Seed Milestones
+  if (milestoneCount === 0) {
+    tasks.push(Milestone.insertMany(seedData.milestones));
+  }
 
   await Promise.all(tasks);
-};
+}
 
+
+// ================= DB CONNECT =================
 mongoose
   .connect(MONGO_URI)
   .then(async () => {
     console.log('Connected to MongoDB Atlas');
-    
-    // Run the seeding logic once connected
-    await seedIfEmpty();
-    console.log('Seeding check complete.');
 
-    // Start the server only after seeding is checked
+    // ⚠️ Ensure seedData exists before using
+    if (typeof seedData !== 'undefined') {
+      await seedIfEmpty();
+      console.log('Seeding complete');
+    } else {
+      console.log('No seedData found, skipping seeding');
+    }
+
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });

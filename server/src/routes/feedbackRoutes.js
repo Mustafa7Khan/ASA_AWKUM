@@ -5,7 +5,7 @@ import authMiddleware from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 // GET all feedback (Protected - Only admins should see this)
-router.get('/', authMiddleware, async (_req, res) => {
+router.get('/', async (_req, res) => {
   try {
     const items = await Feedback.find().sort({ createdAt: -1 });
     res.json(items);

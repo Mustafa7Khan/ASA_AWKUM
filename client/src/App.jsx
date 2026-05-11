@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-// Layout & Components
 import Layout from './components/Layout';
 
 // Public Pages
@@ -13,33 +12,39 @@ import CurrentCabinetPage from './pages/CurrentCabinetPage';
 import PreviousCabinetsPage from './pages/PreviousCabinetsPage';
 import StrugglesPage from './pages/StrugglesPage';
 import FeedbackPage from './pages/FeedbackPage';
-
+import NewsDetail from './pages/NewsDetail';
+import MemberDetail from './pages/MemberDetail';
 // Admin Pages
 import AdminPage from './pages/AdminPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 
-export default function App() {
-  // Initialize token from localStorage
-  const [token, setToken] = useState(() => localStorage.getItem('adminToken') || '');
+function ProtectedRoute({ isAuthenticated, children }) {
+  return isAuthenticated ? children : <Navigate to="/admin-login" replace />;
+}
 
-  // Memoize auth status
+export default function App() {
+  const [token, setToken] = useState(() => localStorage.getItem('token') || '');
+
   const isAuthenticated = useMemo(() => Boolean(token), [token]);
 
   function handleLogin(nextToken) {
-    localStorage.setItem('adminToken', nextToken);
+    localStorage.setItem('token', nextToken);
     setToken(nextToken);
   }
 
   function handleLogout() {
-    localStorage.removeItem('adminToken');
+    localStorage.removeItem('token');
     setToken('');
   }
 
   return (
     <BrowserRouter>
+
       <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+
         <Routes>
-          {/* Public Routes */}
+
+          {/* ================= PUBLIC ROUTES ================= */}
           <Route path="/" element={<HomePage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/current-cabinet" element={<CurrentCabinetPage />} />
@@ -48,8 +53,10 @@ export default function App() {
           <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
+          <Route path="/member/:id" element={<MemberDetail />} />
 
-          {/* Admin Auth Routes */}
+          {/* ================= AUTH ROUTES ================= */}
           <Route
             path="/admin-login"
             element={
@@ -60,22 +67,24 @@ export default function App() {
               )
             }
           />
-          
+
+          {/* ================= PROTECTED ADMIN ================= */}
           <Route
             path="/admin"
             element={
-              isAuthenticated ? (
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <AdminPage />
-              ) : (
-                <Navigate to="/admin-login" replace />
-              )
+              </ProtectedRoute>
             }
           />
 
-          {/* Fallback for 404s */}
+          {/* ================= FALLBACK ================= */}
           <Route path="*" element={<Navigate to="/" replace />} />
+
         </Routes>
+
       </Layout>
+
     </BrowserRouter>
   );
 }

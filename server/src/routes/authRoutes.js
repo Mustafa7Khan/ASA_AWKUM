@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 const router = express.Router();
 
 router.post('/login', (req, res) => {
+  console.log("Login request received with body:", req.body);
   const { email, password } = req.body;
 
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@union.edu';
@@ -15,8 +16,7 @@ router.post('/login', (req, res) => {
 
   const token = jwt.sign(
     { role: 'admin', email },
-    process.env.JWT_SECRET || 'change-me-secret',
-    { expiresIn: '12h' }
+    process.env.JWT_SECRET || 'change-me-secret'
   );
 
   return res.json({ token, role: 'admin' });
